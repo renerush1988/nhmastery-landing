@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHMastery — Stop following plans. Start following your brain.</title>
+<meta name="description" content="The Natural Signature System identifies your neurotype and builds a personalized training, nutrition and sleep plan — that adapts automatically every 2–4 weeks.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0f1520;
+    --surface2: #131b2a;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --muted: #4a5568;
+    --text: #e2e8f0;
+    --text-dim: #718096;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 10%, rgba(0,229,255,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 85% 85%, rgba(124,58,237,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .a1 { animation: fadeUp 0.7s ease both; }
+  .a2 { animation: fadeUp 0.7s 0.1s ease both; }
+  .a3 { animation: fadeUp 0.7s 0.2s ease both; }
+  .a4 { animation: fadeUp 0.7s 0.3s ease both; }
+  .a5 { animation: fadeUp 0.7s 0.4s ease both; }
+
+  /* HEADER */
+  header { padding: 72px 0 52px; text-align: center; }
+  .eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: ''; display: block; width: 32px; height: 1px;
+    background: var(--accent); opacity: 0.4;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5.5vw, 58px);
+    font-weight: 800; line-height: 1.06;
+    letter-spacing: -0.03em; margin-bottom: 18px;
+  }
+  h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle {
+    font-size: 16px; color: var(--text-dim); max-width: 520px;
+    margin: 0 auto 16px; line-height: 1.7; font-weight: 300;
+  }
+  .loss-hook {
+    font-size: 14px; color: var(--red); font-weight: 500;
+    max-width: 480px; margin: 0 auto 24px; line-height: 1.6;
+    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 10px 16px;
+  }
+
+  /* TRUST BAR */
+  .trust-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 52px; }
+  .trust-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 7px 14px; border-radius: 100px; font-size: 12px;
+    border: 1px solid var(--border2); color: var(--text-dim); background: var(--surface);
+  }
+  .trust-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  /* FOUNDING MEMBER BANNER */
+  .founding-banner {
+    background: linear-gradient(135deg, rgba(0,229,255,0.08), rgba(124,58,237,0.08));
+    border: 1px solid rgba(0,229,255,0.25);
+    border-radius: 14px; padding: 16px 24px;
+    text-align: center; margin-bottom: 20px;
+  }
+  .founding-banner strong {
+    font-family: 'Syne', sans-serif; font-size: 13px;
+    color: var(--accent); letter-spacing: 0.05em;
+  }
+  .founding-banner p { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+  /* LOSS STATS SECTION */
+  .loss-section {
+    background: linear-gradient(135deg, rgba(239,68,68,0.06), rgba(239,68,68,0.03));
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 18px; padding: 28px; margin-bottom: 20px;
+  }
+  .loss-section-label {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); font-weight: 500; margin-bottom: 8px;
+  }
+  .loss-section h2 {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+    margin-bottom: 20px; letter-spacing: -0.02em; line-height: 1.3;
+  }
+  .loss-section h2 em { color: var(--red); font-style: normal; }
+  .loss-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media(max-width:600px){ .loss-stats { grid-template-columns: 1fr; } }
+  .loss-stat {
+    background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15);
+    border-radius: 12px; padding: 16px; text-align: center;
+  }
+  .loss-stat .stat-num {
+    font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+    color: var(--red); display: block; margin-bottom: 4px; line-height: 1;
+  }
+  .loss-stat .stat-label { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+  .loss-cta-text {
+    margin-top: 18px; font-size: 13px; color: var(--text-dim);
+    line-height: 1.6; text-align: center; font-style: italic;
+  }
+  .loss-cta-text strong { color: var(--text); font-style: normal; }
+  .stat-source {
+    display: block; font-size: 11px; color: var(--muted);
+    margin-top: 6px; font-style: italic; line-height: 1.4;
+  }
+  .science-footnote {
+    margin-top: 16px; font-size: 11px; color: var(--muted);
+    line-height: 1.7; text-align: center;
+    border-top: 1px solid rgba(239,68,68,0.15); padding-top: 14px;
+  }
+  .science-footnote a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .science-footnote a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* EXPLAINER */
+  .explainer {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 32px; margin-bottom: 20px;
+  }
+  .explainer-label {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 14px;
+  }
+  .explainer h2 {
+    font-family: 'Syne', sans-serif; font-size: 20px;
+    font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em;
+  }
+  .explainer p { font-size: 14px; color: var(--text-dim); line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
+  .explainer-hint {
+    font-size: 12px; color: var(--accent); text-align: center;
+    margin-bottom: 14px; opacity: 0.8; display: flex; align-items: center;
+    justify-content: center; gap: 6px;
+  }
+  .explainer-hint::before { content: '👆'; }
+  .types-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  @media(max-width:600px){ .types-grid { grid-template-columns: repeat(3,1fr); } }
+  .type-chip {
+    background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.12);
+    border-radius: 14px; padding: 16px 8px 12px; text-align: center;
+    font-size: 12px; color: var(--text-dim);
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer; position: relative;
+  }
+  .type-chip:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0,229,255,0.4);
+    background: rgba(0,229,255,0.08);
+    box-shadow: 0 8px 24px rgba(0,229,255,0.12);
+  }
+  .type-chip img {
+    width: 72px; height: 72px; object-fit: cover;
+    border-radius: 50%; margin: 0 auto 10px; display: block;
+    border: 2px solid rgba(0,229,255,0.15);
+    transition: border-color 0.2s ease;
+  }
+  .type-chip:hover img { border-color: rgba(0,229,255,0.4); }
+  .type-chip strong { display: block; font-family: 'Syne', sans-serif; font-size: 13px; color: var(--text); margin-bottom: 3px; }
+  .type-chip span { font-size: 11px; color: var(--text-dim); line-height: 1.4; display: block; }
+  .type-chip .chip-cta {
+    display: block; font-size: 10px; color: var(--accent);
+    margin-top: 6px; opacity: 0; transition: opacity 0.2s ease;
+    letter-spacing: 0.05em;
+  }
+  .type-chip:hover .chip-cta { opacity: 1; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 1000; display: flex; align-items: center; justify-content: center;
+    padding: 20px; opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease; backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal {
+    background: #0f1828; border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px; max-width: 600px; width: 100%;
+    max-height: 85vh; overflow-y: auto;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+  .modal-overlay.active .modal { transform: translateY(0) scale(1); }
+  .modal-header {
+    padding: 28px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 16px; position: relative;
+  }
+  .modal-emoji { font-size: 48px; line-height: 1; flex-shrink: 0; }
+  .modal-header-text { flex: 1; }
+  .modal-type-badge {
+    display: inline-block; font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+    margin-bottom: 6px; font-weight: 500;
+  }
+  .modal-header-text h3 {
+    font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800;
+    margin-bottom: 4px; letter-spacing: -0.02em;
+  }
+  .modal-header-text p {
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+  }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px;
+    background: rgba(255,255,255,0.08); border: none;
+    color: var(--text-dim); width: 32px; height: 32px;
+    border-radius: 50%; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.15); color: var(--text); }
+  .modal-body { padding: 24px 28px 28px; }
+  .modal-section { margin-bottom: 22px; }
+  .modal-section-title {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .modal-section-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .modal-identifies { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .modal-identifies li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+  }
+  .modal-identifies li::before {
+    content: '✓'; color: var(--green); font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .modal-struggle {
+    font-size: 14px; color: var(--text); line-height: 1.7;
+    font-style: italic; padding: 14px 16px;
+    background: rgba(255,255,255,0.03); border-left: 3px solid;
+    border-radius: 0 8px 8px 0;
+  }
+  .modal-losses { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .modal-losses li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+    padding: 10px 12px; background: rgba(239,68,68,0.06);
+    border-radius: 8px; border: 1px solid rgba(239,68,68,0.12);
+  }
+  .modal-losses li::before {
+    content: '⚠'; font-size: 12px; flex-shrink: 0; margin-top: 1px;
+  }
+  .modal-why {
+    font-size: 13px; color: var(--text); line-height: 1.7;
+    padding: 14px 16px;
+    background: rgba(0,229,255,0.05); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  .modal-cta-row { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-cta-btn {
+    flex: 1; padding: 13px 20px; border-radius: 10px;
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.05em; cursor: pointer; border: none;
+    text-decoration: none; display: block; text-align: center;
+    transition: all 0.2s ease;
+  }
+  .modal-cta-primary { background: linear-gradient(135deg, var(--accent), #0080ff); color: #000; }
+  .modal-cta-primary:hover { opacity: 0.9; box-shadow: 0 8px 28px rgba(0,229,255,0.22); }
+  .modal-cta-secondary { background: transparent; border: 1px solid var(--border2); color: var(--text-dim); }
+  .modal-cta-secondary:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+
+  /* HOW IT WORKS */
+  .how {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 32px; margin-bottom: 20px;
+  }
+  .how h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.02em; }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 20px; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; left: 19px; top: 40px;
+    bottom: -8px; width: 1px; background: var(--border);
+  }
+  .step-num {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--accent); flex-shrink: 0;
+  }
+  .step-content { padding-bottom: 24px; }
+  .step-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; font-weight: 300; }
+  .step-time {
+    display: inline-block; margin-top: 6px; font-size: 11px;
+    color: var(--accent); background: rgba(0,229,255,0.06);
+    padding: 3px 10px; border-radius: 100px;
+  }
+
+  /* PLANS */
+  .plans-wrap { margin-bottom: 20px; }
+  .plans-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); text-align: center; margin-bottom: 20px; }
+  .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:640px){ .plans { grid-template-columns: 1fr; } }
+  .plan {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 28px 26px; position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .plan:hover { transform: translateY(-3px); border-color: var(--border2); }
+  .plan.featured {
+    border-color: rgba(0,229,255,0.35);
+    background: linear-gradient(145deg, rgba(0,229,255,0.04), rgba(124,58,237,0.04));
+  }
+  .plan.featured::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 19px;
+    background: linear-gradient(135deg, rgba(0,229,255,0.4), rgba(124,58,237,0.4)); z-index: -1;
+  }
+  .badge {
+    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #000; font-family: 'Syne', sans-serif; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 100px; white-space: nowrap;
+  }
+  .plan-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+  .plan.featured .plan-label { color: var(--accent); }
+  .founding-tag {
+    display: inline-block; font-size: 10px; padding: 3px 10px;
+    background: rgba(34,197,94,0.1); color: var(--green);
+    border-radius: 100px; margin-bottom: 8px; font-weight: 500;
+  }
+  .price { font-family: 'Syne', sans-serif; font-size: 46px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 3px; }
+  .price sup { font-size: 22px; vertical-align: super; font-weight: 600; }
+  .price-future { font-size: 13px; color: #a0aec0; margin-bottom: 4px; }
+  .price-future span { text-decoration: line-through; color: #a0aec0; font-weight: 500; }
+  .price-meta { font-size: 12px; color: var(--text-dim); margin-bottom: 16px; font-weight: 300; }
+  .plan-hook {
+    font-size: 13px; color: var(--text-dim); font-style: italic;
+    line-height: 1.5; padding: 12px 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 11px; }
+  .features li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.4; }
+  .fi {
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; margin-top: 1px;
+  }
+  .fi.y { background: rgba(34,197,94,0.12); color: var(--green); }
+  .fi.n { background: rgba(255,255,255,0.04); color: var(--muted); }
+  .cta {
+    width: 100%; padding: 15px; border-radius: 11px;
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s ease;
+    border: none; margin-bottom: 10px; text-decoration: none;
+    display: block; text-align: center;
+  }
+  .cta-primary { background: linear-gradient(135deg, var(--accent), #0080ff); color: #000; }
+  .cta-primary:hover { opacity: 0.9; box-shadow: 0 10px 36px rgba(0,229,255,0.22); transform: scale(1.01); }
+  .cta-secondary { background: transparent; border: 1px solid var(--border2); color: var(--text-dim); }
+  .cta-secondary:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+  .save-note { font-size: 11px; color: var(--text-dim); text-align: center; }
+  .save-note span { color: var(--accent); }
+  .spots-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 11px; color: var(--text-dim); }
+  .sdots { display:flex; gap:3px; }
+  .sd { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.08); }
+  .sd.on { background: var(--accent); }
+
+  /* LOSS AVERSION URGENCY BOX */
+  .urgency-box {
+    background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 14px; padding: 16px 20px; margin-bottom: 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .urgency-icon { font-size: 20px; flex-shrink: 0; }
+  .urgency-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .urgency-text strong { color: var(--text); }
+
+  /* GUARANTEE */
+  .guarantee {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 28px 28px 28px 26px;
+    display: flex; gap: 20px; margin-bottom: 20px;
+  }
+  .g-icon {
+    width: 48px; height: 48px; background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .guarantee h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .guarantee p { font-size: 13px; color: var(--text-dim); line-height: 1.65; font-weight: 300; }
+  .guarantee .refund-process { margin-top: 12px; font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 6px; }
+
+  /* ABOUT */
+  .about {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 28px; margin-bottom: 20px;
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+    color: #000; flex-shrink: 0;
+  }
+  .about-content h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .about-content p { font-size: 13px; color: var(--text-dim); line-height: 1.65; font-weight: 300; }
+  .credentials { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .cred { font-size: 11px; padding: 4px 11px; border-radius: 100px; border: 1px solid var(--border2); color: var(--text-dim); }
+
+  /* FAQ */
+  .faq { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px; margin-bottom: 40px; }
+  .faq h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { font-size: 14px; font-weight: 500; margin-bottom: 7px; color: var(--text); }
+  .faq-a { font-size: 13px; color: var(--text-dim); line-height: 1.65; font-weight: 300; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px 0 60px; font-size: 13px; color: var(--muted); line-height: 1.8; }
+  .footer strong { color: var(--text-dim); }
+  .footer .big { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); display: block; margin-bottom: 10px; letter-spacing: -0.02em; }
+  .footer-links { margin-top: 20px; font-size: 12px; }
+  .footer-links a { color: var(--muted); text-decoration: none; margin: 0 10px; }
+  .footer-links a:hover { color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<!-- MODAL OVERLAY -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div class="modal-emoji" id="modalEmoji">🦁</div>
+      <div class="modal-header-text">
+        <div class="modal-type-badge" id="modalBadge"></div>
+        <h3 id="modalName"></h3>
+        <p id="modalTagline"></p>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title" id="identifiesTitle" style="color: var(--green);">Does this sound like you?</div>
+        <ul class="modal-identifies" id="modalIdentifies"></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title" style="color: var(--amber);">Your real struggle as a busy professional</div>
+        <div class="modal-struggle" id="modalStruggle"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title" style="color: var(--red);">What you're losing every year without the right system</div>
+        <ul class="modal-losses" id="modalLosses"></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title" style="color: var(--accent);">Why Natural Signature works for your type</div>
+        <div class="modal-why" id="modalWhy"></div>
+      </div>
+      <div class="modal-cta-row">
+        <a href="YOUR_STRIPE_PRO_LINK_HERE" class="modal-cta-btn modal-cta-primary">Get My Natural Signature Plan →</a>
+        <button class="modal-cta-btn modal-cta-secondary" onclick="closeModalDirect()">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="a1">
+    <div class="eyebrow">Natural Signature System</div>
+    <h1>Stop following plans.<br><span>Start following your brain.</span></h1>
+    <p class="subtitle">Every failed diet, every abandoned program — it wasn't your fault. It just wasn't built for your brain. This one is.</p>
+    <div class="loss-hook">
+      ⏳ The average busy professional wastes <strong>104+ hours per year</strong> on programs that work against their neurology. How many have you already lost?
+      <span style="display:block; margin-top:6px; font-size:11px; color:rgba(239,68,68,0.55); font-style:italic;">Conservative estimate: 2 wasted hours/week × 52 weeks</span>
+    </div>
+    <div class="trust-bar">
+      <div class="trust-pill"><span class="dot"></span> Based on neuroscience &amp; neurotyping</div>
+      <div class="trust-pill"><span class="dot"></span> Adapts to your life automatically</div>
+      <div class="trust-pill"><span class="dot"></span> 30-day money-back guarantee</div>
+    </div>
+  </header>
+
+  <!-- FOUNDING MEMBER BANNER -->
+  <div class="founding-banner a1">
+    <strong>🚀 Founding Member Pricing — Limited Time</strong>
+    <p>The first 20 members lock in this price forever. After that, prices increase. You're early — make it count.</p>
+  </div>
+
+  <!-- LOSS STATS SECTION -->
+  <div class="loss-section a2">
+    <div class="loss-section-label">The real cost of the wrong plan</div>
+    <h2>Are you really willing to lose <em>another year</em> to a program not built for your brain?</h2>
+    <div class="loss-stats">
+      <div class="loss-stat">
+        <span class="stat-num">104h</span>
+        <span class="stat-label">Per year wasted on training that fights your neurology — not works with it</span>
+        <span class="stat-source">= 2h/week × 52 weeks — conservative estimate</span>
+      </div>
+      <div class="loss-stat">
+        <span class="stat-num">2–5yr</span>
+        <span class="stat-label">Average time people spend spinning their wheels before finding what actually works</span>
+      </div>
+      <div class="loss-stat">
+        <span class="stat-num">3–5×</span>
+        <span class="stat-label">More cortisol produced when your plan contradicts your neurotype — blocking fat loss &amp; recovery</span>
+      </div>
+    </div>
+    <p class="loss-cta-text">
+      Most programs tell you to "save 2 hours a week." We'd rather ask you this:<br>
+      <strong>Do you really want to keep losing 104+ hours of your life every single year to a system that wasn't designed for you?</strong>
+    </p>
+    <div class="science-footnote">
+      <strong>Why this framing?</strong> Research in behavioral economics shows that people experience losses roughly <strong>2× more intensely</strong> than equivalent gains — meaning what you're losing matters more psychologically than what you could gain.<br>
+      <em>Kahneman, D. &amp; Tversky, A. (1979). Prospect Theory: An Analysis of Decision under Risk. <a href="https://www.jstor.org/stable/1914185" target="_blank" rel="noopener">Econometrica, 47(2), 263–291</a></em>
+    </div>
+  </div>
+
+  <!-- WHAT IS NEUROTYPING -->
+  <div class="explainer a2">
+    <div class="explainer-label">What is the Natural Signature System?</div>
+    <h2>Your brain is wired differently. Your plan should be too.</h2>
+    <p>Most fitness and nutrition programs are built for the average person — which means they work for almost nobody. The Natural Signature System identifies your neurotype: the unique combination of neurotransmitters that controls your energy, motivation, consistency, and stress response. Then it builds your training, nutrition, sleep and supplement plan around that — and adjusts it automatically every 2–4 weeks as your life changes.</p>
+    <div class="explainer-hint">Click on your animal to discover your hidden Pain Points</div>
+    <div class="types-grid">
+      <div class="type-chip" onclick="openModal('lion')">
+        <img src="images/ChatGPT%20Image%205.%20Nov.%202025%2C%2017_45_07%20(1).png" alt="Lion Type">
+        <strong>The Lion</strong>
+        <span>Bold &amp; goal-driven</span>
+        <span class="chip-cta">Discover →</span>
+      </div>
+      <div class="type-chip" onclick="openModal('falcon')">
+        <img src="images/ChatGPT%20Image%205.%20Nov.%202025%2C%2017_45_10%20(1).png" alt="Falcon Type">
+        <strong>The Falcon</strong>
+        <span>Sharp &amp; spontaneous</span>
+        <span class="chip-cta">Discover →</span>
+      </div>
+      <div class="type-chip" onclick="openModal('chameleon')">
+        <img src="images/ChatGPT%20Image%205.%20Nov.%202025%2C%2017_45_12%20(1).png" alt="Chameleon Type">
+        <strong>The Chameleon</strong>
+        <span>Adaptive &amp; social</span>
+        <span class="chip-cta">Discover →</span>
+      </div>
+      <div class="type-chip" onclick="openModal('wolf')">
+        <img src="images/ChatGPT%20Image%205.%20Nov.%202025%2C%2017_45_14%20(1).png" alt="Wolf Type">
+        <strong>The Wolf</strong>
+        <span>Disciplined &amp; strategic</span>
+        <span class="chip-cta">Discover →</span>
+      </div>
+      <div class="type-chip" onclick="openModal('owl')">
+        <img src="images/ChatGPT%20Image%205.%20Nov.%202025%2C%2017_46_18%20(1).png" alt="Owl Type">
+        <strong>The Owl</strong>
+        <span>Analytical &amp; deep</span>
+        <span class="chip-cta">Discover →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how a2">
+    <h2>What happens after you sign up — step by step</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Take your Natural Signature Test</div>
+          <div class="step-desc">A 60-question assessment identifies your neurotype — your brain's unique wiring for energy, motivation and stress. No biology degree needed. Plain language, clear results.</div>
+          <div class="step-time">⏱ Takes ~10 minutes</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Receive your fully personalized plan</div>
+          <div class="step-desc">Within 24 hours you get your custom training, nutrition, sleep and stress plan — built specifically for your neurotype, your schedule, and your goals. No more losing time on one-size-fits-all nonsense.</div>
+          <div class="step-time">⏱ Within 24 hours</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Access your personal dashboard</div>
+          <div class="step-desc">Log into your client app anytime. See your plan, track progress, and watch it adapt in real time. Everything in one place — no spreadsheets, no guesswork, no more time wasted figuring it out alone.</div>
+          <div class="step-time">⏱ Instant access</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Your plan adapts — you stop losing momentum</div>
+          <div class="step-desc">Every 2–4 weeks your program is reviewed and updated. Travel, stress, schedule changes — the system moves with you. No restarts. No falling off track. No losing months of progress to a bad week.</div>
+          <div class="step-time">⏱ Every 2–4 weeks</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANS -->
+  <div class="plans-wrap a3">
+
+    <!-- URGENCY BOX -->
+    <div class="urgency-box">
+      <div class="urgency-icon">⏳</div>
+      <div class="urgency-text">
+        Every week without the right system is another week of suboptimal results, elevated cortisol, and energy you're leaving on the table.
+        <strong> How many more weeks are you willing to lose?</strong>
+      </div>
+    </div>
+
+    <div class="plans-label">Choose your founding member plan</div>
+    <div class="plans">
+      <!-- CORE -->
+      <div class="plan">
+        <div class="founding-tag">⭐ Founding Member Price</div>
+        <div class="plan-label">Core</div>
+        <div class="price"><sup>€</sup>49</div>
+        <div class="price-future">Regular price: <span>€79/mo</span></div>
+        <div class="price-meta">/ month · cancel anytime</div>
+        <div class="plan-hook">"I'm done wasting time on plans that weren't built for my brain."</div>
+        <ul class="features">
+          <li><span class="fi y">✓</span> Natural Signature Neurotype Test</li>
+          <li><span class="fi y">✓</span> Personalized training plan</li>
+          <li><span class="fi y">✓</span> Personalized nutrition plan</li>
+          <li><span class="fi y">✓</span> Sleep &amp; stress basics for your type</li>
+          <li><span class="fi y">✓</span> Supplement recommendations</li>
+          <li><span class="fi y">✓</span> Plan update every 4 weeks</li>
+          <li><span class="fi y">✓</span> Client app &amp; personal dashboard</li>
+          <li><span class="fi n">✗</span> Bi-weekly plan adjustments</li>
+          <li><span class="fi n">✗</span> Spontaneous adaptation protocol</li>
+          <li><span class="fi n">✗</span> Priority support</li>
+        </ul>
+        <!-- REPLACE HREF WITH YOUR STRIPE CORE PAYMENT LINK -->
+        <a href="YOUR_STRIPE_CORE_LINK_HERE" class="cta cta-secondary">Stop Wasting Time — Start Now →</a>
+        <div class="save-note">Price locked for life · <span>First 20 members only</span></div>
+      </div>
+      <!-- PRO -->
+      <div class="plan featured">
+        <div class="badge">⚡ Most Popular</div>
+        <div class="founding-tag">⭐ Founding Member Price</div>
+        <div class="plan-label">Pro</div>
+        <div class="price"><sup>€</sup>99</div>
+        <div class="price-future">Regular price: <span>€149/mo</span></div>
+        <div class="price-meta">/ month · cancel anytime</div>
+        <div class="plan-hook">"My life moves fast. I can't afford a system that falls behind."</div>
+        <div class="spots-row">
+          <div class="sdots">
+            <div class="sd on"></div><div class="sd on"></div><div class="sd on"></div>
+            <div class="sd on"></div><div class="sd on"></div><div class="sd on"></div>
+            <div class="sd on"></div><div class="sd"></div><div class="sd"></div><div class="sd"></div>
+          </div>
+          <span>7 of 10 spots taken — personally reviewed by Roby</span>
+        </div>
+        <ul class="features">
+          <li><span class="fi y">✓</span> Natural Signature Neurotype Test</li>
+          <li><span class="fi y">✓</span> Personalized training plan</li>
+          <li><span class="fi y">✓</span> Personalized nutrition plan</li>
+          <li><span class="fi y">✓</span> Advanced sleep &amp; stress optimization</li>
+          <li><span class="fi y">✓</span> Advanced supplement stack</li>
+          <li><span class="fi y">✓</span> <strong>Plan update every 2 weeks</strong></li>
+          <li><span class="fi y">✓</span> Client app &amp; personal dashboard</li>
+          <li><span class="fi y">✓</span> <strong>Spontaneous adaptation protocol</strong></li>
+          <li><span class="fi y">✓</span> <strong>Priority support (48h response)</strong></li>
+          <li><span class="fi y">✓</span> <strong>Direct access to Roby</strong></li>
+        </ul>
+        <!-- REPLACE HREF WITH YOUR STRIPE PRO PAYMENT LINK -->
+        <a href="YOUR_STRIPE_PRO_LINK_HERE" class="cta cta-primary">Claim Your Spot — Before It's Gone →</a>
+        <div class="save-note">Price locked for life · <span>Only 3 spots left</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUARANTEE -->
+  <div class="guarantee a3">
+    <div class="g-icon">🛡️</div>
+    <div>
+      <h3>30-Day Money-Back Guarantee</h3>
+      <p>Apply the system for 30 days. If you don't feel a real, measurable difference in your energy, consistency, or results — you get every cent back. No forms, no back-and-forth, no conditions. Just send one email to <strong style="color:var(--text)">support@nhmastery.com</strong> and the refund is processed within 48 hours.</p>
+      <div class="refund-process">✓ One email · Refund within 48 hours · No questions asked</div>
+    </div>
+  </div>
+
+  <!-- ABOUT ROBY -->
+  <div class="about a4">
+    <div class="avatar">R</div>
+    <div class="about-content">
+      <h3>Who is behind this system?</h3>
+      <p>I'm Roby — certified fitness trainer, NeuroHealth Coach, and the creator of the Natural Signature System. I've spent years combining neuroscience, behavioral psychology, and hands-on coaching into one system that adapts to real people with real, chaotic lives. I built this because every generic program failed my clients — not because they lacked discipline, but because the program wasn't built for their brain. I've seen busy professionals waste years on programs that actively worked against their neurotype. That ends here.</p>
+      <div class="credentials">
+        <div class="cred">Diploma in Training &amp; Nutrition</div>
+        <div class="cred">NeuroHealth Coaching</div>
+        <div class="cred">Braverman Neurotyping</div>
+        <div class="cred">FitBoxing Certified</div>
+        <div class="cred">Natural Signature™ Creator</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq a4">
+    <h2>Your questions, answered honestly</h2>
+    <div class="faq-item">
+      <div class="faq-q">Is this based on real science or is it made-up?</div>
+      <div class="faq-a">The Natural Signature System is built on established neuroscience research — specifically the Braverman model and Christian Thibaudeau's Neurotyping system, which links dominant neurotransmitters (dopamine, serotonin, GABA, acetylcholine) to personality, behavior, and physical performance. This isn't astrology. It's applied neuroscience adapted for everyday health and fitness. Individual differences in response to training are well-documented in the scientific literature — Bouchard et al. (1999) demonstrated significant inter-individual variation in physiological adaptation to the same exercise protocol, with some individuals showing near-zero response to programs that produced strong results in others. The neurotyping layer explains why.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Why only 10 spots for Pro?</div>
+      <div class="faq-a">Every Pro plan is personally reviewed and adjusted by me — not just generated by an algorithm. That takes real time. 10 clients means I can give each of you the attention your plan deserves. When those spots are gone, they're gone until a slot opens. Don't find out the hard way.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What makes this different from a regular training app?</div>
+      <div class="faq-a">Apps like MyFitnessPal or generic plans give you the same program everyone else gets — meaning you're almost guaranteed to be using a plan optimized for someone else's brain. The Natural Signature System starts with how your brain works, then builds everything around that. The difference isn't motivation — it's neurology.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">I've tried so many programs. Why would this be different?</div>
+      <div class="faq-a">Because this time the program adapts to you — not the other way around. Every program you quit didn't fail because you lacked willpower. It failed because it demanded your brain behave like a different type of brain. Your neurotype determines how you respond to stress, food, training intensity, sleep, even motivation. That's what we fix first.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">I don't have much time. Will this still work?</div>
+      <div class="faq-a">This was built for exactly that. The system includes a 15-minute reset protocol for days when everything goes sideways. Consistency beats perfection every time — but only if your system is built to handle the chaos of a real professional life. Ours is.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I cancel anytime?</div>
+      <div class="faq-a">Yes. No contracts, no cancellation fees. Cancel with one click anytime directly from your dashboard. Your access continues until the end of the billing period.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I get support?</div>
+      <div class="faq-a">Simply email us at <strong>support@nhmastery.com</strong> — we respond within 48 hours. Pro members receive priority support with faster turnaround.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer a5">
+    <span class="big">You haven't failed. The system failed you.</span>
+    Every plan you quit, every diet you abandoned — it wasn't a lack of discipline.<br>
+    It was a plan that was never designed for your brain.<br><br>
+    <strong>The question isn't whether you're capable. The question is: how many more years are you willing to lose?</strong>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="mailto:support@nhmastery.com">support@nhmastery.com</a>
+    </div>
+    <div style="margin-top:16px; font-size:11px; color:#2d3748;">
+      © 2026 NHMastery · Natural Signature System · All rights reserved
+    </div>
+  </div>
+
+</div>
+
+<script>
+const neurotypes = {
+  lion: {
+    emoji: '🦁',
+    name: 'The Lion',
+    type: 'Natural Signature — Neurotype 1A',
+    tagline: 'Dominant · Goal-Driven · All-or-Nothing',
+    color: '#f59e0b',
+    identifies: [
+      'You need to see results fast — or you lose interest and move on entirely',
+      'You hate being told what to do and don\'t follow rules that feel arbitrary',
+      'You\'re completely all-or-nothing: either 100% in or totally checked out',
+      'You thrive under pressure but crash when things get repetitive or slow',
+      'You\'ve launched more programs than you can count — and abandoned all of them'
+    ],
+    struggle: '"You dominate in the boardroom but your fitness plan can\'t keep up with your pace. You\'ve tried a dozen programs this year. Every single one failed you — not because you lacked discipline, but because it wasn\'t built for your dopamine-driven brain."',
+    losses: [
+      '104+ hours per year of training sessions that actually deplete your dopamine instead of building it — leaving you more drained, not more energized',
+      'Your aggressive "all-in" approach without the right recovery protocol is steadily destroying your testosterone levels and draining the mental drive you need to lead',
+      'Every standard diet crashes your dopamine production — which is why you feel sluggish after lunch, unmotivated by 3pm, and frustrated that "nothing sticks"'
+    ],
+    why: 'Lions need intensity, fast visible results, and short powerful sessions with the right recovery built in. Your Natural Signature plan is structured around your dopamine system — heavy, purposeful, efficient. No fluff. No padding. Just results that actually match your pace and your brain.'
+  },
+  falcon: {
+    emoji: '🦅',
+    name: 'The Falcon',
+    type: 'Natural Signature — Neurotype 1B',
+    tagline: 'Explosive · Multi-Tasker · Natural Athlete',
+    color: '#00b4d8',
+    identifies: [
+      'You pick up new skills fast but get bored — and check out — just as quickly',
+      'You instinctively multitask and get restless doing the same thing twice',
+      'You perform brilliantly under pressure but need variety to stay motivated',
+      'You\'re naturally athletic but have never found a system that matches your explosiveness',
+      'People call you a "natural" — but you\'ve never found a plan that capitalizes on it'
+    ],
+    struggle: '"You\'re the most naturally gifted person in the gym — but you\'ve never stuck to a program long enough to show it. Your high-acetylcholine brain craves variety and novelty. Every \'normal\' plan kills your motivation by week 3, and you\'re back to square one."',
+    losses: [
+      'Years of your natural athletic potential wasted on programs designed for slow, methodical neurotypes — not your explosive, multi-modal brain',
+      'Without the right carbohydrate timing for your acetylcholine system, you experience brain fog and poor decision-making at work — losing hours of productivity daily',
+      'Training monotony doesn\'t just bore you — it physiologically suppresses your performance output and kills the neurological drive that makes you exceptional'
+    ],
+    why: 'Falcons thrive on variety, speed, and explosive movement with intelligent structure underneath. Your Natural Signature plan rotates exercises strategically, keeps intensity high and monotony low, and adapts every 2–4 weeks — before you ever hit the wall of boredom.'
+  },
+  chameleon: {
+    emoji: '🦎',
+    name: 'The Chameleon',
+    type: 'Natural Signature — Neurotype 2A',
+    tagline: 'Adaptive · Social · Adrenaline-Sensitive',
+    color: '#06d6a0',
+    identifies: [
+      'You adapt perfectly to everyone around you — but forget to prioritize yourself',
+      'You procrastinate until the last minute, then somehow pull it off under pressure',
+      'You get genuinely excited about new programs — and abandon them equally fast',
+      'What others think of you matters deeply — and failed programs hit harder than they should',
+      'You experience FOMO constantly and hate feeling left out or left behind'
+    ],
+    struggle: '"You\'re the most socially intelligent person in every room and everyone leans on you. Your calendar is packed with other people\'s priorities. By the time you get to your own health, you\'re running on empty — and another generic plan is the last thing your adrenaline-sensitive brain wants to see."',
+    losses: [
+      'Without built-in variety, your norepinephrine system flatlines — making you feel flat, unmotivated, and disconnected from the confident version of yourself you know exists',
+      'Every abandoned program costs you 6–8 weeks of momentum, compounding into years of spinning your wheels while watching others progress',
+      'The "people pleaser" spiral means you keep starting programs for others\' validation — and quitting when the recognition stops. That cycle is costing you your own results.'
+    ],
+    why: 'Chameleons need built-in variety, evolving challenges, and a system that adapts with you — not against your need for stimulation. Your Natural Signature plan rotates strategies every few weeks, keeps your brain engaged, and builds on your natural social adaptability rather than fighting it.'
+  },
+  wolf: {
+    emoji: '🐺',
+    name: 'The Wolf',
+    type: 'Natural Signature — Neurotype 2B',
+    tagline: 'Empathetic · Disciplined · High Emotional Intelligence',
+    color: '#7c3aed',
+    identifies: [
+      'One bad day can quietly derail your entire week — you feel setbacks more deeply than others',
+      'You give everything to the people around you, and often leave nothing for yourself',
+      'When stress spikes, food becomes comfort — and then you judge yourself harshly for it',
+      'You\'re incredibly patient and empathetic, but brutally self-critical when you fall short',
+      'A single bad workout can kill your motivation for days — the emotional weight is real'
+    ],
+    struggle: '"You pour everything into your work, your relationships, your responsibilities. When stress hits — and it always hits — your cortisol spikes. The wrong training and nutrition plan turns this into a downward spiral: poor sleep, emotional eating, guilt, and months of lost progress in a single stressful week."',
+    losses: [
+      'High cortisol without proper GABA nutritional support means your body is actively storing fat — even when you think you\'re \'eating clean\' and training hard',
+      'Without a stress management protocol built into your plan, every tough week at work undoes 3–4 weeks of progress — a cycle that compounds into years of stagnation',
+      'The all-or-nothing restriction-and-emotional-eating cycle is the single biggest drain on your energy, confidence, and long-term results — and generic plans make it worse'
+    ],
+    why: 'Wolves need a system that works with their emotional wiring — not a plan that treats discipline as the only variable. Your Natural Signature plan supports your GABA system nutritionally, structures training around your stress cycles, and keeps you consistent even when life gets hard. Because your biggest strength is your depth — and we build a system worthy of it.'
+  },
+  owl: {
+    emoji: '🦉',
+    name: 'The Owl',
+    type: 'Natural Signature — Neurotype 3',
+    tagline: 'Analytical · Structured · Precision-Driven',
+    color: '#a78bfa',
+    identifies: [
+      'You function best with a clear, predictable structure — spontaneous changes genuinely stress you out',
+      'You\'re the researcher: you\'ve read everything, but analysis paralysis keeps you from starting',
+      'You prefer to master something completely before considering moving on',
+      'You\'re patient and disciplined — but chronic background anxiety is quietly draining your energy',
+      'Unexpected plan changes by a coach or program feel almost physically wrong to you'
+    ],
+    struggle: '"You know more about nutrition and training than most coaches. But knowing and implementing are completely different. Your high-cortisol, low-serotonin brain hates uncertainty — and most programs are full of it. Sudden changes, vague instructions, and inconsistent progressions aren\'t just annoying: they\'re physiologically damaging for your neurotype."',
+    losses: [
+      'As the highest natural cortisol producer of all neurotypes, every "intense" or "varied" program isn\'t building your body — it\'s physiologically breaking it down, increasing injury risk and blocking recovery',
+      'Low serotonin without targeted nutritional support keeps your baseline anxiety chronically elevated — burning cognitive resources you need for peak work performance and focus',
+      'The wrong training stimulus — too explosive, too variable — triggers a stress response in your nervous system that takes 48–72 hours to recover from, destroying your weekends and bleeding into your work week'
+    ],
+    why: 'Owls need structure, clear progressions, and a plan that never changes without warning. Your Natural Signature plan gives you the predictability your brain craves — with precise periodization you can see weeks ahead, detailed explanations of every decision, and gradual adaptations that feel natural rather than jarring. Finally — a plan built for how your brain actually works.'
+  }
+};
+
+function openModal(type) {
+  const data = neurotypes[type];
+  if (!data) return;
+
+  document.getElementById('modalEmoji').textContent = data.emoji;
+
+  const badge = document.getElementById('modalBadge');
+  badge.textContent = data.type;
+  badge.style.background = data.color + '20';
+  badge.style.color = data.color;
+  badge.style.border = '1px solid ' + data.color + '40';
+
+  document.getElementById('modalName').textContent = data.name;
+  document.getElementById('modalTagline').textContent = data.tagline;
+
+  const struggle = document.getElementById('modalStruggle');
+  struggle.textContent = data.struggle;
+  struggle.style.borderLeftColor = data.color;
+
+  const identifies = document.getElementById('modalIdentifies');
+  identifies.innerHTML = data.identifies.map(i => `<li>${i}</li>`).join('');
+
+  const losses = document.getElementById('modalLosses');
+  losses.innerHTML = data.losses.map(l => `<li>${l}</li>`).join('');
+
+  document.getElementById('modalWhy').textContent = data.why;
+
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+  if (event.target === document.getElementById('modalOverlay')) {
+    closeModalDirect();
+  }
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModalDirect();
+});
+</script>
+</body>
+</html>
